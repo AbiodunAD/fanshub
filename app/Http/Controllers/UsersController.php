@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Comment;
 use App\Models\Like;
+use App\Models\Vote;
 use App\Models\Postcard;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserUpdate;

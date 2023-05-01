@@ -31,8 +31,13 @@ class UsersController extends Controller
         $user = Auth::user();
         // $user->hasVerifiedEmail();
         $comments = Comment::all();
-        $postcards = Postcard::latest()->filter(request(['search']))->get();
-        // $userPostIds = Like::where('user_id', auth()->id())->pluck('postcard_id')->toArray();   
+        // $postcards = Postcard::latest()->filter(request(['search']))->get();
+        // $userPostIds = Like::where('user_id', auth()->id())->pluck('postcard_id')->toArray(); 
+        $postcards = Postcard::latest()
+        ->with('userVotes')
+        ->withCount(['votes as likesCount' => fn (Builder $query) => $query->where('vote', '>', 0)], 'vote')
+        ->withCount(['votes as dislikesCount' => fn (Builder $query) => $query->where('vote', '<', 0)], 'vote')
+        ->filter(request(['search']))->get();   
         $likes = Like::all();
         
         return view('fans.dashboard')
